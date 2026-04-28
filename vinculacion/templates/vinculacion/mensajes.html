@@ -1,0 +1,44 @@
+{% extends 'vinculacion/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="titulo-seccion mb-4">Mensajes recibidos</h1>
+    <ul class="list-group">
+        {% for mensaje in page_obj.object_list %}
+            <li class="list-group-item mb-3">
+                <div class="mensaje">
+                    <h4 class="mensaje-asunto">{{ mensaje.asunto }}</h4>
+                    <p class="mensaje-info">De: {{ mensaje.remitente }} | Fecha: {{ mensaje.fecha_envio }}</p>
+                    <h6 class="mensaje-contenido">{{ mensaje.contenido }}</h6>
+                    <br>
+                    {% if mensaje.leido %}
+                        <span class="badge bg-success">Leído</span>
+                    {% else %}
+                        <span class="badge bg-warning">No leído</span>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination mt-4">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+<br>
+{% endblock %}

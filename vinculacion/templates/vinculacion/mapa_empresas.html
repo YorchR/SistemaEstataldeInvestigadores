@@ -1,0 +1,157 @@
+{% load static %}
+
+{% block scripts %}
+
+
+
+<script src="{% static 'dist/assets/js/extensions/form-element-select.js' %}"></script>
+
+<script>
+
+    var geocoder;
+    var map;
+    var marker;
+    var infowindow;
+    var datos;
+
+    {% if accion == 'Nueva' or accion == 'Crear' %}
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 22.766050981989335, lng: -102.5697492675781 },
+                zoom: 11,
+            });
+
+            marker = new google.maps.Marker({
+                map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: { lat: 22.766050981989335, lng: -102.5697492675781 },
+            });
+        }
+
+    {% else %}
+
+        function initMap() {
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 22.766050981989335, lng: -102.5697492675781 },
+                zoom: 13,
+            });
+
+            infowindow = new google.maps.InfoWindow();
+
+            /*
+            *Mueve el marcador cuando se da clic en el nombre de una empresa.
+            */
+            document.querySelectorAll('.empresa-nombre').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    //console.log('si clic', this.innerText);
+                    var lat = parseFloat(this.dataset.lat);
+                    var lng = parseFloat(this.dataset.lng);
+                    setMarker(lat, lng);
+                });
+            });
+
+            /*
+            *Mueve el marcador cuando se da clic en el nombre de una institucion educativa.
+            */
+            document.querySelectorAll('.institucion-nombre').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    //console.log('si clic', this.innerText);
+                    var lat = parseFloat(this.dataset.lat);
+                    var lng = parseFloat(this.dataset.lng);
+                    setMarker(lat, lng);
+                });
+            });
+            
+            /*
+            *Agrega el marcador en las coordenadas guardadas.
+            */
+            function setMarker(lat, lng) {
+                if (!marker) {
+                    marker = new google.maps.Marker({
+                        map: map,
+                        draggable: false,
+                        animation: google.maps.Animation.DROP,
+                    });
+                }
+                
+                var position = new google.maps.LatLng(lat, lng);
+                marker.setPosition(position);
+                map.setCenter(position);
+                map.setZoom(16);
+                infowindow.setContent(datos);
+            }
+
+            marker.addListener("dragend", toggleBounce);
+        }
+
+    {% endif %}
+
+    /*
+    * Agrega un marcador dependiendo los datos de la dirección que se agregan
+    */
+    function direccion() {
+
+        var calle = document.getElementById('id_calle').value;
+        var numero = document.getElementById('id_numero_exterior').value;
+        var colonia = document.getElementById('id_colonia').value;
+        var cp = document.getElementById('id_codigo_postal').value;
+
+        var municipio = document.getElementById('id_municipio');
+        var munIndex = municipio.selectedIndex;
+        var munTxt = municipio.options[munIndex].text;
+
+
+        var direccion = calle + ' ' + numero + ', ' + colonia + ', ' + cp + ', ' + munTxt + ', Zacatecas';
+
+        //console.log(direccion);
+        geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({ 'address': direccion }, function (results, status) {
+            if (status == 'OK') {
+                var ubicacion = results[0].geometry.location;
+                if (marker) {
+                    //console.log("Existe marcador");
+                    marker.setPosition(ubicacion);
+                    map.setCenter(ubicacion);
+                    map.setZoom(16);
+                } else {
+                    //console.log("No existe marcador");
+                    marker = new google.maps.Marker({
+                        position: ubicacion,
+                        map: map
+                    });
+                    map.setCenter(ubicacion);
+                    map.setZoom(16);
+                }
+            } else {
+                //console.log(status);
+                alert('No se pudo agregar el marcador correctamente por la siguiente razon: No se agregó una dirección');
+            }
+        });
+
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        marker.addListener("dragend", toggleBounce);
+
+    }
+
+    /*
+    * Coloca las coordenadas del marcador en los campos de latitud y longitud. (Estos se encuentran ocultos)
+    */
+    function toggleBounce() {
+        var posicion = marker.getPosition();
+        //marker.setAnimation(google.maps.Animation.BOUNCE);
+        document.getElementById('id_latitud').value = posicion.lat();
+        document.getElementById('id_longitud').value = posicion.lng();
+
+    }
+
+
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL9a8LN_KKjD3K86k5afjwOCGlMcVAhNc&callback=initMap"></script>
+
+{% endblock %}

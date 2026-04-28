@@ -1,0 +1,104 @@
+{% extends 'vinculacion/base.html' %}
+{% load static %}
+
+{% block extraresources %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block headers %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+
+  <h1 class="titulo-seccion">Empresas</h1>
+
+<div class="row w-75">
+    <div class="col-md-6">
+        <form method="GET" action="" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Buscar empresas..." value="{{ request.GET.q }}">
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        {% if not object_list %}
+          <div class="alert alert-secondary">No existen empresas.</div>
+        {% endif %}
+
+        {% for empresa in object_list %}
+        <ol class="list-group list-group-flush">
+            <div class="col-md-18">
+                <div class="card empresa">
+                    <div class="row row-no-gutters">
+                        <div class="col-4">
+                            {% if empresa.imagen %}
+                            <img src="{{MEDIA_URL}}/{{empresa.imagen}}" class="card-img m-2" alt="...">
+                            {% else %}
+                            <img src="{% static 'img/empresa.jpg' %}" class="card-img m-2" alt="...">
+                            {% endif %}
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h5 class="card-title empresa-nombre" data-lat="{{ empresa.latitud }}" data-lng="{{ empresa.longitud }}">
+                                    <a href="javascript:void(0);" onclick="setMarker({{ empresa.latitud }}, {{ empresa.longitud }})">
+                                        {{empresa.nombre_empresa}}
+                                    </a>
+                                </h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Especialidades:</b> {{empresa.especialidades.all|join:", "}}</li>
+                                <li class="list-group-item"><b>Contacto:</b></br>
+                                    Correo electrónico: {{empresa.email}}</br>
+                                    Teléfono: {{empresa.telefono}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ol>
+        {% endfor %}
+    </div>
+    {% if object_list %}
+    <div class="col-md-6">
+        <div id="map" style="height: 450px; width: 120%;"></div>
+    </div>
+    {% else %}
+    {% endif %}
+</div>
+    
+    
+    <div class="d-flex justify-content-center mt-3">
+    <ul class="pagination pagination-primary">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+            </a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{page_obj.previous_page_number}}</a></li>
+        {% endif %}
+
+        <li class="page-item active"><a class="page-link" href="#">{{page_obj.number}}</a></li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{page_obj.next_page_number}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+            </a></li>
+        {% endif %}
+    </ul>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% include 'vinculacion/mapa_empresas.html' %}
+
+{% endblock scripts %}

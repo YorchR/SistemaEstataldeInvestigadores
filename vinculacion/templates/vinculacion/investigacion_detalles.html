@@ -1,0 +1,72 @@
+{% extends 'vinculacion/base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<section>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <a class="btn btn-danger btn-sm" href="{% url 'vinculacion:investigaciones_lista' %}">Regresar</a>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Título</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigacion.titulo}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Autor(es)</p>
+                            </div>
+                            <div class="col-sm-9">
+                                {% if investigacion.autores.count == 0 %}
+                                    <p class="text-muted">No se especifica</p>
+                                {% else %}
+                                    {% for autores in investigacion.autores.all %}
+                                        <p class="text-muted">{{ autores.nombre_completo }}</p>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Categoria</p>
+                            </div>
+                            <div class="col-sm-9">
+                                {% if investigacion.categorias.count == 0 %}
+                                    <p class="text-muted mb-0">Sin categoria</p>
+                                {% else %}
+                                    <p class="text-muted mb-0">{{investigacion.categorias.all|join:", "}}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Contenido</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigacion.contenido}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+{% endblock %}

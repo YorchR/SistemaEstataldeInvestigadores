@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar cuenta</title>
+</head>
+<body>
+    <h3>Validar cuenta</h3>
+    <p>Estimado/a <b>{{user.username}}</b>:</p>
+    <p>¡Bienvenido/a al Sistema Estatal de Investigadores de Zacatecas!</p>
+    <p>Estamos encantados de que te hayas unido a nuestra comunidad de investigadores.</p>
+    <p>Para completar el proceso de registro y activar tu cuenta, por favor haz clic en el siguiente enlace:</p>
+    <br>
+    <p>
+        <a href="http://{{sitio}}{% url 'usuarios:activar' uidb64=uid token=token%}">
+            Activar cuenta
+        </a>
+    </p>
+    <p>Una vez que hayas activado tu cuenta, podrás acceder a todas las funciones y recursos que nuestro sistema tiene para ofrecer.</p>
+    <p>¡Gracias por unirte a nosotros y esperamos verte pronto en el Sistema Estatal de Investigadores de Zacatecas!</p>
+    <br>
+    <p>Si tú no te inscribiste a este sistema, ignora este correo.</p>
+    <br>
+    <p>Atentamente</p>
+    <p>El Equipo del Sistema Estatal de Investigadores de Zacatecas</p>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+{% extends 'vinculacion/base.html' %}
+{% load static %}
+
+{% block extraresources %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/datatables.css' %}">
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/fontawesome.css' %}">
+{% endblock %}
+
+{% block contenido %}
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+
+  <h1 class="titulo-seccion">Investigadores</h1>
+
+  <div class="card w-75">
+    <div class="row no-gutters">
+      <div class="col-md-6 d-flex align-items-center">
+        <img src="{% static 'img/anfitrion.jpg' %}" class="card-img" alt="..." style="width: 75%; height: 80%;" alt="...">
+      </div>
+      <div class="col-md-6">
+        <div class="card-body">
+          <h5 class="card-title">Investigadores</h5>
+          <p class="card-text">Conoce a los investigadores del estado de Zacatecas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row w-75">
+
+    <table class="table" id="table1">
+      <thead>
+        <tr>
+          <th>Foto de perfil</th>
+          <th>Nombre del investigador</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for investigador in object_list %}
+        <tr>
+          <td>
+            {% if investigador.imagen %}
+            <img src="{{MEDIA_URL}}/{{investigador.imagen}}" class="rounded-3" style="width: 100px; height: 100px;" alt="...">
+            {% else %}
+            <img src="{% static 'dist/assets/images/faces/1.jpg' %}" class="rounded-3" style="width: 100px; height: 50px;" alt="...">
+            {% endif %}
+          </td>
+          <td>{{investigador.nombre_completo|capfirst}}</td>
+          <td>
+            <a href="{% url 'investigadores:investigador_perfil' investigador.pk%}" class="btn btn-primary">Ver perfil</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'dist/assets/js/extensions/datatables.js' %}"></script>
+{% endblock %}

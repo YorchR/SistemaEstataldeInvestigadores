@@ -1,0 +1,90 @@
+{% extends 'vinculacion/perfil_base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+{% if user.tipo_usuario_id == 1 %}
+<br>
+  <div class="row w-100 p-2 m-0">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h4>Agregar investigación</h4>
+        </div>
+        <div class="card-body">
+          <a href="{% url 'investigadores:investigacion_nuevo' %}"><span class="badge bg-success">Crear</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+{% endif %}
+
+<h1 class="titulo-seccion">Investigaciones en curso</h1>
+
+<div class="row w-100 p-2 m-0 d-flex justify-content-center">
+  <div class="col-md-9">
+    <div class="card p-3">
+      <div class="table-responsive">
+          <table class="table table-lg">
+              <thead>
+                  <tr>
+                      <th>Título</th>
+                      <th>Autor(es)</th>
+                      <th>Opciones</th>
+                  </tr>
+              </thead>
+              <tbody>
+  {% for investigacion in object_list %}
+                  <tr>
+                    <td>{{investigacion.titulo}}</td>
+                    {% if investigacion.autores.count == 0 %}
+                      <td>No se especifica</td>
+                    {% else %}
+                      {% for autores in investigacion.autores.all %}
+                          <td>{{ autores.nombre_completo }}</td>
+                      {% endfor %}
+                    {% endif %}
+                    <td>
+                      <a href="{% url 'vinculacion:investigaciones_detalles' investigacion.pk %}"><span
+                        class="badge bg-info text-dark">Detalles</span></a>
+                      {% if user.tipo_usuario_id == 1 %}
+                      <a href="{% url 'vinculacion:investigaciones_editar' investigacion.pk %}"><span
+                        class="badge bg-warning text-dark">Editar</span></a>
+                      <a href="{% url 'vinculacion:investigaciones_eliminar' investigacion.pk %}"><span
+                          class="badge bg-danger">Eliminar</span></a>
+                      {% else %}
+                      {% endif %}
+                    </td>
+                    <!--<td>{{investigacion.categorias.all|join:", "}}</td>-->
+                  </tr>
+  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+      <div class="d-flex justify-content-center mt-3">
+      <ul class="pagination pagination-primary">
+          {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                  <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+              </a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+          {% endif %}
+
+          <li class="page-item active"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+
+          {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                  <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+              </a></li>
+          {% endif %}
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block elemento_activo %}investigaciones{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'vinculacion/perfil_base.html' %}
+{% load static %}
+
+{% block contenido_perfil %}
+
+<div class="row w-100 p-2 m-0">
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+
+				<div class="d-flex align-items-center overflow-auto">
+					<div class="avatar avatar-xl">
+						{% if usuario_data.imagen %}
+						<img src="{{MEDIA_URL}}/{{usuario_data.imagen}}" alt="Face 1">
+						{% else %}
+						<img src="{% static 'dist/assets/images/faces/1.jpg' %}" alt="Avatar">
+						{% endif %}
+					</div>
+					
+					<div class="ms-3 name">
+						<h5 class="font-bold">{{user.username|capfirst}}</h5>
+						<h6 class="text-muted mb-0">{{user.email}}</h6>
+						{% if user.tipo_usuario.tipo == "Investigador" and usuario_data.link_google_scholar %}
+						<a target="_blank" href="{{usuario_data.link_google_scholar}}"><span
+								class="badge bg-info">Google Scholar</span></a>
+						{% endif %}
+						{% if user.tipo_usuario.tipo == "Investigador" and usuario_data.curriculum_vitae %}
+						<a target="_blank" href="{% url 'investigadores:mostrar_cv' user.pk%}"
+							class="badge bg-secondary">Curriculum Vitae</a>
+						{% endif %}
+						{% if usuario_data.es_sei %}
+						<span class="badge bg-primary">SEI</span>
+						{% endif %}
+						{% if usuario_data.es_sni %}
+						<span class="badge bg-primary">SNI</span>
+						{% endif %}
+						{% if usuario_data.constancia %}
+						<a target="_blank" download="proposed_file_name" href="{{MEDIA_URL}}/{{usuario_data.constancia}}"><span
+							class="badge bg-primary">Ver constancia</span></a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="col-md-8">
+		<div class="card">
+			<div class="card-body px-5 py-4">
+				<h5>{{user.tipo_usuario.tipo}}</h5>
+
+				<hr />
+
+				<h5>Especialidades</h5>
+
+			</div>
+		</div>
+	</div>
+
+	{%if categoriaA %}
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="font-bold">Categoria A - Producción Científica y Tecnológica</h5>
+					<div class="d-flex align-items-center overflow-auto">
+						<table class="table" id="table1">
+							<thead>
+							<tr>
+								<th>Periodo</th>
+								<th>Estatus</th>
+							</tr>
+							</thead>
+							<tbody>
+								{% for categoria in categoriaA %}
+									<tr>
+										<td>{{categoria.anio}}</td>
+										{% if categoria.estatus == "E"%}
+											<td>En revisión</td>
+										{% elif categoria.estatus == "I" %}
+											<td>En proceso</td>
+										{% elif categoria.estatus == "G" %}
+											<td>Ganador</td>
+											{% elif categoria.estatus == "F" %}
+											<td>Finalizada</td>
+										{% endif %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	{%endif%}
+
+	{%if categoriaB %}
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="font-bold">Categoria B - Superación Académica, Formación de Recursos Humanos y Otros</h5>
+					<div class="d-flex align-items-center overflow-auto">
+						<table class="table" id="table2">
+							<thead>
+							<tr>
+								<th>Periodo</th>
+								<th>Estatus</th>
+							</tr>
+							</thead>
+							<tbody>
+								{% for categoria in categoriaB %}
+									<tr>
+										<td>{{categoria.anio}}</td>
+										{% if categoria.estatus == "E"%}
+											<td>En revisión</td>
+										{% elif categoria.estatus == "I" %}
+											<td>En proceso</td>
+										{% elif categoria.estatus == "G" %}
+											<td>Ganador</td>
+											{% elif categoria.estatus == "F" %}
+											<td>Finalizada</td>
+										{% endif %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	{%endif%}
+</div>
+
+{% endblock %}
+
+{% block elemento_activo %}perfil{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'administracion/base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<section>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a class="btn btn-danger btn-sm" href="{% url 'administracion:investigadores_lista' %}">Regresar</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a class="btn btn-warning btn-sm text-dark" href="{% url 'administracion:investigadores_editar' investigador.pk %}">Editar</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        {% if tiene_imagen %}
+                        <img src="{{ investigador.imagen.url }}" alt="avatar" class="rounded-circle img-fluid"
+                            style="width: 150px;">
+                        {% else %}
+                            <p>No hay foto del perfil disponible</p>
+                        {% endif %}
+                        <h5 class="my-3">{{investigador.nombre_completo}}</h5>
+                        <p class="text-muted mb-1">{{investigador.area_conocimiento}}</p>
+                        <p class="text-muted mb-4">{{investigador.acerca_de}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">CURP</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigador.curp}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Correo</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigador.user.email}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Teléfono</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigador.telefono}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Dirección</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigador.calle}} #{{investigador.numero_exterior}},
+                                    {{investigador.colonia}}, {{investigador.codigo_postal}},
+                                    {{investigador.get_municipio_display}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Google Scholar</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{investigador.link_google_scholar}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+{% endblock %}

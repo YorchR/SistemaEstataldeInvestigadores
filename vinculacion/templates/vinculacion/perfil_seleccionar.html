@@ -1,0 +1,64 @@
+{% extends 'vinculacion/base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<div class="row w-100 p-2 m-0">
+  <div class="col-md-12">
+    <div class="card text-center">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs justify-content-center">
+          <li class="nav-item">
+            <a name="investigaciones" class="nav-link" id="investigaciones"
+              href="{% url 'vinculacion:investigaciones_lista' %}">Investigaciones en curso</a>
+          </li>
+          <!--
+          <li class="nav-item">
+            <a class="nav-link" id="solicitudes_trabajo"
+              href="{% url 'investigadores:solicitudes_trabajo_lista' %}">Historial de Investigaciones</a>
+          </li>
+        -->
+        </ul>
+      </div>
+    </div>
+
+    <h1 class="titulo-seccion">Selecciona el tipo de usuario que deseas crear</h1>
+
+    <div class="row h-100 w-100 p-5">
+
+      <div class="col-md-4">
+        <a href="{% url 'investigadores:investigador_form' %}" id="investigador">
+            <div class="card perfil-opcion" style="height: 300px; background-image: url('static/img/inv.png');">
+                <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                    <h2>Investigador</h2>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{% url 'empresas:empresa_form' %}" id="empresa">
+            <div class="card perfil-opcion" style="height: 300px; background-image: url('static/img/empresa.png');">
+                <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                    <h2>Centro de Investigación / Empresa / Institución Pública</h2>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{% url 'instituciones_educativas:institucion_educativa_form' %}" id="institucion-educativa">
+            <div class="card perfil-opcion" style="height: 300px; background-image: url('static/img/institucion.png');">
+                <div class="card-img-overlay d-flex justify-content-center align-items-center">
+                    <h2>Institución Educativa</h2>
+                </div>
+            </div>
+        </a>
+    </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

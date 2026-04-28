@@ -1,0 +1,95 @@
+{% extends 'vinculacion/base.html' %}
+{% load static %}
+
+{% block extraresources %}
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/form-element-select.css' %}">
+{% endblock extraresources %}
+
+{% block headers %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<div class="d-flex justify-content-center p-5">
+    <div class="w-75">
+        <div class="card">
+        <div class="card-body">
+            {% if form.errors %}
+              <div class = "alert alert-warning">
+                {{form.errors}}
+              </div>
+            {% endif %}
+            <form action="" method="post" enctype = "multipart/form-data" class = "">
+            {% csrf_token %}
+            {% if accion == 'Crear' %}
+                <div class = "row">
+                    <div class = "col"><p>{{form.encargado.label}}: {{form.encargado}}</p></div>
+                </div>
+            {% else %}
+            {% endif %}
+            <div class = "row">
+                <div class = "col"><p>{{form.nombre_empresa.label}}: {{form.nombre_empresa}}</p></div>
+                <div class = "col"><p>{{form.tipo_institucion.label}}: {{form.tipo_institucion}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.especialidades.label}}: {{form.especialidades}}</p></div>
+                <div class = "col"><p>{{form.especialidad.label}}: {{form.especialidad}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.email.label}}: {{form.email}}</p></div>
+                <div class = "col"><p>{{form.telefono.label}}: {{form.telefono}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.calle.label}}: {{form.calle}}</p></div>
+                <div class = "col"><p>{{form.numero_exterior.label}}: {{form.numero_exterior}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.colonia.label}}: {{form.colonia}}</p></div>
+                <div class = "col"><p>{{form.codigo_postal.label}}: {{form.codigo_postal}}</p></div>
+                <div class = "col"><p>{{form.municipio.label}}: {{form.municipio}}</p></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h6><b>Geolocalización: Para una mejor precisión, arrastrar el marcador a la posición exacta</b></h6>
+                </div>
+                <div class = "row">
+                    <div class = "col" hidden ><p>{{form.latitud.label}}: {{form.latitud}}</p></div>
+                    <div class = "col" hidden ><p>{{form.longitud.label}}: {{form.longitud}}</p></div>
+                    <input class="btn btn-success" type="button" value="Agregar Marcador" onclick="return direccion();">
+                </div>
+            </div>
+                <p></p>
+            <p></p>
+            <div id="map" style="height: 400px; width: 100%;"></div>
+            <p></p>
+            <div class = "row">
+                <div class = "col"><p>{{form.acerca_de.label}}: {{form.acerca_de}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.elementos.label}}: {{form.elementos}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.imagen.label}}: {{form.imagen}}</p></div>
+            </div>
+            <div class = "row">
+                <div class = "col"><p>{{form.comprobante.label}}: {{form.comprobante}}</p></div>
+            </div>
+            <div class="col-12 d-flex justify-content-end">
+              <button type="submit" class="btn btn-success">Guardar</button>
+              <button type="button" class="btn btn-danger" onclick="window.history.back()">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{% endblock contenido %}
+
+{% block scripts %}
+
+{% include 'vinculacion/mapa_empresas.html' %}
+
+{% endblock scripts %}

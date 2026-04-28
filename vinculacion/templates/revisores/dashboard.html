@@ -1,0 +1,61 @@
+{% extends 'revisores/base.html' %}
+{% load static %}
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/datatables.css' %}">
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/fontawesome.css' %}">
+{% endblock %}
+
+{% block contenido %}
+
+{% for message in messages %}
+{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+<div class="alert alert-danger">{{message}}</div>
+{% else %}
+<div class="alert alert-success">{{message}}</div>
+{% endif %}
+{% endfor %}
+
+<section class="section">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Listado de solicitudes de la categoría: Producción Científica y Tecnológica</h4>
+      </div>
+      <div class="card-body">
+        <table class="table" id="table1">
+          <thead>
+            <tr>
+              <th>Registro</th>
+              <th>Nombre del investigador</th>
+              <th>CURP del investigador</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for revisor in revisiones %}
+            <tr>
+              <td>{{revisor.solicitud_id}}</td>
+              <td>{{revisor.solicitud.user.nombre_completo}}</td>
+              <td>{{revisor.solicitud.user.curp}}</td>
+              <td>
+                <a href="{% url 'investigadores:export-zip-file' revisor.solicitud_id %}"><span
+                class="badge bg-info">Descargar Zip</span></a>
+                <a href="{% url 'investigadores:asignar-calificacion-cat-a' revisor.id %}"><span
+                  class="badge bg-primary">Calificar</span></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'dist/assets/js/extensions/datatables.js' %}"></script>
+{% endblock %}
+
+{% block marcar_activo %}categoria-a{% endblock %}

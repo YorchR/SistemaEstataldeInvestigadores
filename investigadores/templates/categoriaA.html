@@ -1,0 +1,88 @@
+
+{% extends 'vinculacion/perfil_base.html' %}
+{% load static %}
+{% block extraresources %}
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/form-element-select.css' %}">
+<script>
+  const curp = "{{curp}}"
+  const user_id = "{{user_id}}"
+  const investigador = "{{investigador.user.id}}"
+  if(user_id != investigador) window.location.replace("{% url 'vinculacion:premios' %}");
+
+  const c1 = "{{c1}}"
+
+  if(c1 != 0 ) window.location.replace("{% url 'investigadores:solicitud-realizada' %}");
+
+  function curpToDate(curp){
+    var miCurp = curp.toUpperCase();
+    resultado = document.getElementById("resultado");
+
+    var m = miCurp.match(/^\w{4}(\w{2})(\w{2})(\w{2})/);  
+    var anyo = parseInt(m[1], 10) + 1900;
+    if (anyo < 1950) anyo += 100;
+    var mes = parseInt(m[2], 10) - 1;
+    var dia = parseInt(m[3], 10);  
+    var fechaNacimiento = new Date(anyo, mes, dia);
+    var edad = calcularEdad(fechaNacimiento);
+    return edad;
+  }
+
+  function calcularEdad(fecha) {
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+  
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+      edad--;
+    }
+    return edad;
+  }
+</script>
+{% endblock %}
+
+{% block contenido_perfil %}
+<div class="d-flex justify-content-center">
+
+  <div class="w-75">
+    <div class="card">
+      <div class="card-header">
+        <h5>{{titulo}}</h5>
+        <p><b>Nota: </b>Solo se permiten archivos en formato .PDF con un tamaño máximo de 5Mb</p>
+      </div>
+      <div class="card-body">
+        <form method="POST" {% if formulario_archivos %}enctype="multipart/form-data"{% endif %}>
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+          <div class="col-12">
+            <div class="form-group">
+              <label for="{{field.auto_id}}">{{ field.label }}</label>
+              {{ field }}
+              {% for error in field.errors %}
+              <div class="alert alert-danger">{{error}}</div>
+              {% endfor %}
+              {% if field.errors %}
+              <script>
+                document.getElementById("{{field.auto_id}}").classList.add("is-invalid");
+              </script>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+          <div class="col-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary me-1 mb-1">Guardar</button>
+            <button type="reset" class="btn btn-dark me-1 mb-1">Reiniciar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block elemento_activo %}premios{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'dist/assets/js/extensions/form-element-select.js' %}"></script>
+{% endblock %}

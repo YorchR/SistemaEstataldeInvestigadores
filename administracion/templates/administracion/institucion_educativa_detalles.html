@@ -1,0 +1,152 @@
+{% extends 'administracion/base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<section>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <nav aria-label="breadcrumb" class="bg rounded-3 p-3 mb-4">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a class="btn btn-danger btn-sm" href="{% url 'administracion:instituciones_educativas_lista' %}">Regresar</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'administracion:instituciones_educativas_editar' institucion_educativa.pk %}"><span
+                                class="btn btn-warning btn-sm text-dark">Editar</span></a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        {% if tiene_imagen %}
+                        <img src="{{ institucion_educativa.imagen.url }}" alt="avatar" class="rounded-circle img-fluid"
+                            style="width: 150px;">
+                        {% else %}
+                            <p>No hay foto del perfil disponible</p>
+                        {% endif %}
+                        <h5 class="my-3">{{institucion_educativa.nombre_institucion}}</h5>
+                        <p class="text-muted mb-2"><strong>Especialidades:</strong></p>
+                            {% for areas in institucion_educativa.especialidades.all %}
+                                {% if areas %}    
+                                    <p class="text-muted mb-3">{{ areas }}</p>
+                                {% else %}
+                                    <p class="text-muted mb-3">No se encontraron</p>
+                                {% endif %}
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Correo</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{institucion_educativa.email}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Teléfono</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{institucion_educativa.telefono}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Miembros</p>
+                            </div>
+                            <div class="col-sm-9">
+                                {% for miembros in institucion_educativa.miembros.all %}
+                                    <p class="text-muted mb-0">{{ miembros.nombre_completo }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Dirección</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">{{institucion_educativa.calle}} #{{institucion_educativa.numero_exterior}},
+                                    {{institucion_educativa.colonia}}, {{institucion_educativa.codigo_postal}},
+                                    {{institucion_educativa.municipio}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class = "row">
+                            <div class = "col" hidden ><p>Latitud: {{institucion_educativa.latitud}}</p></div>
+                            <div class = "col" hidden ><p>Longitud: {{institucion_educativa.longitud}}</p></div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Geolocalización</p>
+                            </div>
+                            <br>
+                            <br>
+                            <div id="map" style="height: 300px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+        var map;
+        var marker;
+
+        var latitudE = {{institucion_educativa.latitud}};
+        var longitudE = {{institucion_educativa.longitud}};
+
+        if (latitudE){
+            console.log("Eciste la latitud");
+        } else {
+            console.log("No existe la latitud");
+        }
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: parseFloat(latitudE), lng: parseFloat(longitudE) },
+                zoom: 16,
+            });
+
+            marker = new google.maps.Marker({
+                map,
+                draggable: false,
+                animation: google.maps.Animation.BOUNCE,
+                position: { lat: parseFloat(latitudE), lng: parseFloat(longitudE) },
+            });
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            marker.addListener("dragend", toggleBounce);
+
+
+        }
+
+        function toggleBounce() {
+            var posicion = marker.getPosition();
+            //marker.setAnimation(google.maps.Animation.BOUNCE);
+            document.getElementById('id_latitud').value = posicion.lat();
+            document.getElementById('id_longitud').value = posicion.lng();
+
+        }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL9a8LN_KKjD3K86k5afjwOCGlMcVAhNc&callback=initMap">
+
+    </script>
+{% endblock %}

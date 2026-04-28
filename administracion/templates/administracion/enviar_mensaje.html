@@ -1,0 +1,17 @@
+{% extends 'administracion/base.html' %}
+{% load static %}
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/datatables.css' %}">
+<link rel="stylesheet" href="{% static 'dist/assets/css/pages/fontawesome.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <h2>Enviar Mensaje</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-light-success">Enviar</button>
+        <a class="btn btn-danger btn-sm" onclick="history.back()">Regresar</a>
+    </form>
+{% endblock %}
